@@ -13,7 +13,7 @@ public class EditPanel extends JPanel {
 	
 	JPanel editPanel = new JPanel();
 
-	public EditPanel(JPanel content) {
+	public EditPanel(TrackerPane tracker) {
 		JButton button = new JButton("fake edit");
 		this.add(button);	
 	}

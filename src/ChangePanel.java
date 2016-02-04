@@ -13,7 +13,7 @@ public class ChangePanel extends JPanel {
 	
 	JPanel changePanel = new JPanel();
 
-	public ChangePanel(JPanel content) {
+	public ChangePanel(TrackerPane tracker) {
 		JButton button = new JButton("fake changes");
 		this.add(button);
 	}
