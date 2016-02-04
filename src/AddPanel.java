@@ -13,7 +13,7 @@ public class AddPanel extends JPanel {
 	
 	JPanel addPanel = new JPanel();
 
-	public AddPanel(JPanel content) {
+	public AddPanel(TrackerPane tracker) {
 		JButton button = new JButton("fake add");
 		this.add(button);
 
