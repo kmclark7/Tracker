@@ -1,9 +1,12 @@
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  * 
@@ -97,6 +100,9 @@ public class TrackerPane extends JTabbedPane{
 			
 			content.add(tabPane);
 			tabPane.setSelectedComponent(viewPanel);
+
+			ChListener chListener = new ChListener();
+			tabPane.addChangeListener(chListener);
 			
 			//Set access to tabs
 			//if (fits role or access)
@@ -108,7 +114,6 @@ public class TrackerPane extends JTabbedPane{
 
 			
 	public void LogIn(){
-      
 		content.remove(tabPane);
 		tracker = new TrackerPane(content, true);
 		content.revalidate();
@@ -120,6 +125,29 @@ public class TrackerPane extends JTabbedPane{
 		content.revalidate();
 	}
 
+	private class ChListener implements ChangeListener{
+
+		/* (non-Javadoc)
+		 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+		 */
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			int tabIndex = tabPane.getSelectedIndex();
+/*			String tabTitle = tabPane.getTitleAt(tabIndex);
+			System.out.println(tabIndex+"   "+tabTitle);
+			//String tabText = tracker.getToolTipTextAt(tabIndex);	
+			if (tabTitle.equals(USER)) {
+			    UserPanel newPanel = new UserPanel(tracker);
+				tabPane.remove(tabIndex);
+			    tabPane.insertTab(USER, null, newPanel, USER_TEXT, tabIndex);	
+			    tabPane.revalidate();
+			}
+*/		
+
+			
+			}
+	}
+		
 }//end TrackerPane
 
 

@@ -146,7 +146,6 @@ public class UserDAO {
 				
 				try {
 					String q = "delete from user where userID='" + tempUser.getUserID() + "';";
-					System.out.println(q);
 					st = con.createStatement();
 					st.executeUpdate(q);
 					
