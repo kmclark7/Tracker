@@ -19,9 +19,8 @@ public class DefectTracker extends JFrame {
 	 */
 
 	private static final int FRAME_WIDTH = 1900;
-	private static final int FRAME_HEIGHT = 1000;
-	private static final int TOP_BORDER = 50;
-	private static Dimension dimension = new Dimension(FRAME_WIDTH, FRAME_HEIGHT-TOP_BORDER);
+	private static final int FRAME_HEIGHT = 950;
+	private static Dimension dimension = new Dimension(FRAME_WIDTH, FRAME_HEIGHT);
 	private static JFrame frame = new JFrame("The Tracker");
 	
 
@@ -41,6 +40,7 @@ public class DefectTracker extends JFrame {
 		//Make the panel the content pane and add the tracker to it.
 		frame.setContentPane(content);
 		content.add(new TrackerPane(content), BorderLayout.CENTER);
+		frame.pack();
 		frame.setVisible(true);	
 		
 	}//end main

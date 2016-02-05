@@ -17,8 +17,6 @@ import javax.swing.table.TableModel;
  */
 public class ViewPanel extends JPanel {
 	
-	private JPanel viewPanel = new JPanel();
-
 	// private DefectTable table;
 
 	private final int BORDER_LENGTH = 20;

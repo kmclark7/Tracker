@@ -21,6 +21,7 @@ public class TrackerPane extends JTabbedPane{
 	private final String EDIT = "EDIT RECORD";
 	private final String CHANGE = "VIEW CHANGES";
 	private final String USER = "USER DATA";
+	private final String ADD_USER = "ADD USER";
 	
 	private final String LOG_TEXT = "Log in or out.";
 	private final String VIEW_TEXT = "View Defect Records.";
@@ -28,6 +29,7 @@ public class TrackerPane extends JTabbedPane{
 	private final String EDIT_TEXT = "Edit Existing Defect.";
 	private final String CHANGE_TEXT = "Show Details of Changes Made.";
 	private final String USER_TEXT = "Add or Edit User Information.";
+	private final String ADD_USER_TEXT = "Add a New User";
 			
 	private boolean isLoggedIn;
 	private JPanel content;
@@ -38,12 +40,11 @@ public class TrackerPane extends JTabbedPane{
 	private EditPanel editPanel;
 	private ChangePanel changePanel;
 	private UserPanel userPanel;
-
+	private AddUserPanel addUserPanel;
 
 	// Create a tabbed pane and fonts for tabs	
 	private JTabbedPane tabPane = new JTabbedPane();
-	Font unselectedTabFont = new Font("Dialog", Font.PLAIN, 18);
-	Font selectedTabFont = new Font("Dialog", Font.BOLD, 18);
+	Font tabFont = new Font("Dialog", Font.PLAIN, 18);
 			
 	
 	public TrackerPane(JPanel content){
@@ -56,14 +57,10 @@ public class TrackerPane extends JTabbedPane{
 		this.content = content;
 		
 		//Set size, fonts, etc. for tabbed pane
-		tabPane.setPreferredSize(new Dimension(1600, 800));
+		tabPane.setPreferredSize(new Dimension(content.getPreferredSize()));
 		tabPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-		tabPane.setFont(unselectedTabFont);
-		tabPane.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
-
-				
-		//Create the panels for each tab
-		//*********Re-make for Role/AccessLevel*********
+		tabPane.setFont(tabFont);
+		tabPane.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		
 		int index = 0;
 		
@@ -72,7 +69,6 @@ public class TrackerPane extends JTabbedPane{
 			
 			logPanel = new LoginUserPanel(this, false);
 			tabPane.insertTab(LOG, null, logPanel,LOG_TEXT , index++);
-			System.out.println(LOG+" "+LOG_TEXT+" "+index);
 			content.add(tabPane);
 			
 		//This sets up other tabs if logged in.
@@ -86,7 +82,7 @@ public class TrackerPane extends JTabbedPane{
 
 			addPanel = new AddPanel(this);	
 			tabPane.insertTab(ADD, null, addPanel, ADD_TEXT, index++);
-
+	
 			editPanel = new EditPanel(this);	
 			tabPane.insertTab(EDIT, null, editPanel, EDIT_TEXT, index++);
 
@@ -95,27 +91,32 @@ public class TrackerPane extends JTabbedPane{
 
 			userPanel = new UserPanel(this);
 			tabPane.insertTab(USER, null, userPanel, USER_TEXT, index++);
-			System.out.println(USER+"  "+USER_TEXT+" "+ index);
+		
+			addUserPanel = new AddUserPanel(this);
+			tabPane.insertTab(ADD_USER, null, addUserPanel, ADD_USER_TEXT, index++);
 			
 			content.add(tabPane);
-			tabPane.setSelectedComponent(viewPanel);	
+			tabPane.setSelectedComponent(viewPanel);
+			
+			//Set access to tabs
+			//if (fits role or access)
+			//then tabPane.setEnabledAt(tabPane.indexOfTab(CHANGE), false);
 		}
 		
 		
 	}//end Constructor
 
-		
-	
+			
 	public void LogIn(){
       
 		content.remove(tabPane);
-		new TrackerPane(content, true);
+		tracker = new TrackerPane(content, true);
 		content.revalidate();
 	}
 
 	public void LogOut(){
 		content.removeAll();
-		new TrackerPane(content, false);
+		tracker = new TrackerPane(content, false);
 		content.revalidate();
 	}
 
