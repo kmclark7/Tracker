@@ -59,28 +59,29 @@ public class UserDAO {
 		} catch (SQLException ex) {
 			System.out.println("Error with table or data");
 		}
+		
+		getCurrentList();
 	}
 	
-		public String getCurrentList() {
+		//public String getCurrentList() {
 
-			String str = "";
+		//	String str = "";
 
-			return str;
+		//	return str;
+		//}
+
+	//Changed to use to print data to screen if needed
+	public void getCurrentList() {
+		for (int i = 0; i < arrayList.size(); i++) {
+			System.out.println(arrayList.get(i).getUserID());
+			System.out.println(arrayList.get(i).getPassword());
+		
+
 		}
+	}
+		
+		
 
-/*	//We probably won't need this and there were errors, so I commented out.
-	public String getCurrentListFromUserID (String s) {
-			String str = "";
-			for (int i = 0; i < arrayList.size(); i++) {
-				if (arrayList.get(i).getUserID().equals(s)){   
-					str += arrayList.get(i).getPassword();
-					str += "\n";
-
-				}
-			}
-			return str;
-		}
-*/
 		
 		//***We will need a method here to check that the password entered matches.
 		
@@ -114,6 +115,133 @@ public class UserDAO {
 			}
 
 		}
+		
+		
+		public void insertNewUser(User u) {
+				makeConnection();
+				
+				try {
+					String q = "insert into user (LAST_NAME, FIRST_NAME, POSITION, ACCESS_LEVEL, TEAM, EMAIL, PASSWORD) values "
+							+ "('"+u.getLastName() + "', '" + u.getFirstName() + "', '" + u.getPosition() + "', '" 
+							+ u.getAccessLevel() + "', '" + u.getTeam() + "', '" + u.getEmail() + "', '" + u.getPassword() + "');";
+					st = con.createStatement();
+					System.out.println(q);
+					st.executeUpdate(q);
+					if (st != null) {
+						st.close();
+					}
+					if (con != null) {
+						con.close();
+					}
+				} catch (SQLException ex) {
+					System.out.println("Error with table or data");
+				}
+			}
+			
+		//These added by Milissa
+			public void deleteUser(User tempUser) {
+				// TODO Auto-generated method stub
+				
+				makeConnection();
+				
+				try {
+					String q = "delete from user where userID='" + tempUser.getUserID() + "';";
+					System.out.println(q);
+					st = con.createStatement();
+					st.executeUpdate(q);
+					
+					System.out.println(q+" --- DELETED");
+					
+					//close the statement and connection once we are done
+					if(st != null) {
+						st.close();
+					}
+					if(con != null) {
+						con.close();
+					}
+					System.out.println(arrayList);
+					
+					} catch (SQLException ex) {
+						System.out.println("Error with table or data");
+						System.out.println(ex);
+					}
+				
+			}
+			
+			public void searchUser(User u) {
+				makeConnection();
+				
+				try {
+					String q = "";
+					String criteria = "";
+					int cnt = 0;
+					
+					Integer uid = u.getUserID();
+					if (uid != null) {
+						criteria += "userid=" + u.getUserID();
+					}
+					if (u.getLastName() != null) {
+						if (cnt > 0) {
+							criteria += ", and "; 
+						}
+						criteria += "last_name=" + u.getLastName();
+					}
+					if (u.getFirstName() != null) {
+						if (cnt > 0) {
+							criteria += ", and ";
+						}
+						criteria += "first_name=" + u.getFirstName();
+					}
+					if (u.getPosition() != null) {
+						if (cnt > 0) {
+							criteria += ", and ";
+						}
+						criteria += "position=" + u.getPosition();
+					}
+					
+					Integer al = u.getAccessLevel();
+					if (al != null) {
+						if (cnt > 0) {
+							criteria += ", and ";
+						}
+						criteria += "access_level=" + u.getAccessLevel();
+					}
+					if (u.getTeam() != null) {
+						if (cnt > 0) {
+							criteria += ", and ";
+						}
+						criteria += "team=" + u.getTeam();
+					}
+					if (u.getEmail() != null) {
+						if (cnt > 0) {
+							criteria += ", and ";
+						}
+						criteria += "email=" + u.getEmail();
+					}
+					if (u.getPassword() != null) {
+						if (cnt > 0) {
+							criteria += ", and ";
+						}
+						criteria += "password=" + u.getPassword();
+					}
+					if (cnt > 0) {
+						q = "select * from user where " + criteria + ";";
+					}else {
+						q = "select * from user;";
+					}
+					st = con.createStatement();
+					st.executeUpdate(q);
+					if (st != null) {
+						st.close();
+					}
+					if (con != null) {
+						con.close();
+					}
+				} catch (SQLException ex) {
+					System.out.println("Error with table or data");
+				}
+			}
+		
 		public void makeConnection() {
 			String url = "jdbc:mysql://localhost:3306/tracker";
 			String user = "root";
