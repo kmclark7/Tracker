@@ -55,7 +55,7 @@ public class AddUserPanel extends JPanel{
 		JPanel textBoxes = new JPanel(new GridLayout(8,0));
 		
 		buttonLabels.add(userLabel);
-		user.setEditable(false);              //this is auto-inc -- How to handle this??
+		user.setEditable(false);              //this is auto-inc 
 		//  SELECT LAST_INSERT_ID();
 		textBoxes.add(user);	
 		buttonLabels.add(lNameLabel);
@@ -106,11 +106,6 @@ public class AddUserPanel extends JPanel{
 				//Just changed the order to match - moved Password (Kris)
 				User u = new User(tempUserInt,tempPassword, tempLName, tempFName, tempPosition, tempAccessLevelInt, tempTeam, tempEmail);
 				userDAO.insertNewUser(u);
-				UserDAO userDAO = new UserDAO();
-				System.out.println(userTableModel.getRowCount()-1+"  "+userTableModel.getValueAt(userTableModel.getRowCount()-1, 0));
-				tempUserInt = (int) userTableModel.getValueAt(userTableModel.getRowCount()-1, 0);
-				userTableModel.addRow(u);
-				u.setUserID(tempUserInt);
 				//user.setText("");
 				lName.setText("");
 				fName.setText("");

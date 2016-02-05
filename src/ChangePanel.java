@@ -11,7 +11,6 @@ import javax.swing.JPanel;
  */
 public class ChangePanel extends JPanel {
 	
-	JPanel changePanel = new JPanel();
 
 	public ChangePanel(TrackerPane tracker) {
 		JButton button = new JButton("fake changes");

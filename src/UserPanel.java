@@ -34,6 +34,7 @@ public class UserPanel extends JPanel{
 	JButton addUser = new JButton("Add user");
 	JButton search = new JButton("Search user");
 	JButton remove = new JButton("Remove user");
+	Font tableFont = new Font("Dialog", Font.PLAIN, 14);
 		
 	//Added a parameter with the name of the main TrackerPane in case needed.
 	public UserPanel(TrackerPane tracker){
@@ -46,7 +47,8 @@ public class UserPanel extends JPanel{
 		addUser.setToolTipText("Add new user to system");
 		search.setToolTipText("Search by Last Name, First Name");
 		remove.setToolTipText("Highlight task you want removed and click this button.");
-		userTable.setBackground(Color.lightGray);
+		userTable.setFont(tableFont);
+		//userTable.setBackground(Color.lightGray);
 	    
 	    scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -95,7 +97,7 @@ public class UserPanel extends JPanel{
 				userDAO.deleteUser(tempUser);
 				
 				//userModel.remove(index);
-				userTableModel.removeRow(index);
+				userTableModel.removeUser(index);
 				//user.setListData(userModel.toArray());
 				scroll.revalidate();
 				scroll.repaint();
