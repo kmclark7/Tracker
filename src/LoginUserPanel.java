@@ -10,6 +10,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * This is a panel object that displays a login screen and handles logging in and out.
+ */
+
+/**
+ * @author Kerty Levy
+ */
 
 //Renamed class and Constructor to start with capital.
 public class LoginUserPanel extends JPanel {

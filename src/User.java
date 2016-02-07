@@ -1,4 +1,12 @@
 
+/**
+ * This is the User object containing data for all users.
+ */
+
+/**
+ * @author Kerty Levy
+ */
+
 public class User {
 
 	private int userID;

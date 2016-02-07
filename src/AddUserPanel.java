@@ -11,6 +11,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * This is a panel object for entering new users into the user database.
+ */
+
+/**
+ * @author Kerty Levy
+ */
+
 public class AddUserPanel extends JPanel {
 	// Grid Layout used
 
@@ -85,20 +93,23 @@ public class AddUserPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
+			//needs try-catch for numberformat exception
+			
 			if (e.getSource() == submit) {
 				int tempUserInt = -1;           //temporary because auto-int
-				String tempLName = lName.getText();
-				String tempFName = fName.getText();
-				String tempPosition = position.getText();
-				String tempAccessLevel = accessLevel.getText();
-				String tempTeam = team.getText();
-				String tempEmail = email.getText();
-				String tempPassword = password.getText();
+				String tempLName = lName.getText().trim();
+				String tempFName = fName.getText().trim();
+				String tempPosition = position.getText().trim();
+				String tempAccessLevel = accessLevel.getText().trim();;
+				String tempTeam = team.getText().trim();
+				String tempEmail = email.getText().trim();
+				String tempPassword = password.getText().trim();
 
 				int tempAccessLevelInt = Integer.parseInt(tempAccessLevel);
-
+				
+				//Need error checking
 				User user = new User(tempUserInt,tempPassword, tempLName, tempFName, tempPosition, tempAccessLevelInt, tempTeam, tempEmail);
-				//userDAO.insertNewUser(user);  // Now does this in userTableModel
+				//userDAO.insertNewUser(user);  // Now does this in userTableModel below
 				userTableModel.addUser(user);
 				lName.setText("");
 				fName.setText("");
