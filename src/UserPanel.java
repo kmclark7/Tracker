@@ -93,11 +93,10 @@ public class UserPanel extends JPanel{
 			
 			if (index != -1) {
 				
-				User tempUser = userModel.get(index);
-				userDAO.deleteUser(tempUser);
+				//User tempUser = userModel.get(index);
+				//userDAO.deleteUser(tempUser);
 				
-				//userModel.remove(index);
-				userTableModel.removeUser(index);
+				userTableModel.removeUserAt(index);
 				//user.setListData(userModel.toArray());
 				scroll.revalidate();
 				scroll.repaint();
