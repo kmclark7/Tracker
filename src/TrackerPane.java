@@ -44,6 +44,7 @@ public class TrackerPane extends JTabbedPane{
 	private ChangePanel changePanel;
 	private UserPanel userPanel;
 	private AddUserPanel addUserPanel;
+	private ChangeListener chListener;
 
 	// Create a tabbed pane and fonts for tabs	
 	private JTabbedPane tabPane = new JTabbedPane();
@@ -101,9 +102,6 @@ public class TrackerPane extends JTabbedPane{
 			content.add(tabPane);
 			tabPane.setSelectedComponent(viewPanel);
 
-			ChListener chListener = new ChListener();
-			tabPane.addChangeListener(chListener);
-			
 			//Set access to tabs
 			//if (fits role or access)
 			//then tabPane.setEnabledAt(tabPane.indexOfTab(CHANGE), false);
@@ -114,39 +112,33 @@ public class TrackerPane extends JTabbedPane{
 
 			
 	public void LogIn(){
+		setVisible(false);
 		content.remove(tabPane);
 		tracker = new TrackerPane(content, true);
 		content.revalidate();
+		setVisible(true);
 	}
 
 	public void LogOut(){
+		setVisible(false);
 		content.removeAll();
 		tracker = new TrackerPane(content, false);
 		content.revalidate();
+		setVisible(true);
+	}
+	
+	public void updateUserPanel(){
+		setVisible(false);
+		int index = tabPane.indexOfComponent(userPanel);
+		tabPane.remove(userPanel);
+		fireStateChanged();
+		userPanel = new UserPanel(this);
+		tabPane.insertTab(USER, null, userPanel, USER_TEXT, index);
+		System.out.println(tabPane.indexOfComponent(userPanel));
+		setVisible(true);
+
 	}
 
-	private class ChListener implements ChangeListener{
-
-		/* (non-Javadoc)
-		 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
-		 */
-		@Override
-		public void stateChanged(ChangeEvent e) {
-			int tabIndex = tabPane.getSelectedIndex();
-/*			String tabTitle = tabPane.getTitleAt(tabIndex);
-			System.out.println(tabIndex+"   "+tabTitle);
-			//String tabText = tracker.getToolTipTextAt(tabIndex);	
-			if (tabTitle.equals(USER)) {
-			    UserPanel newPanel = new UserPanel(tracker);
-				tabPane.remove(tabIndex);
-			    tabPane.insertTab(USER, null, newPanel, USER_TEXT, tabIndex);	
-			    tabPane.revalidate();
-			}
-*/		
-
-			
-			}
-	}
 		
 }//end TrackerPane
 

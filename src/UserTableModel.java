@@ -14,8 +14,8 @@ class UserTableModel extends AbstractTableModel {
 			"Access Level", "Team Name", "Email Address" };
 	private Class<?>[] colClass = {int.class, String.class, String.class, String.class, String.class,
 		int.class, String.class, String.class};
-	private Class<User> rowClass = User.class;
-	private boolean isModelEditable = true;
+	//private Class<User> rowClass = User.class;
+	//private boolean isModelEditable = true;
 	UserDAO userDAO = new UserDAO();
 	ArrayList<User> userModel = new ArrayList<User>(userDAO.arrayList);
 
@@ -102,14 +102,17 @@ class UserTableModel extends AbstractTableModel {
     
 	public void insertUser(int row, User user)
 	{
-		userData.add(row, user);
-		fireTableRowsInserted(row, row);
-	}//need function to set DAO
+		boolean hadSuccess = userDAO.insertNewUser(user);
+		if(hadSuccess) {
+			userData.add(row, user);
+			fireTableRowsInserted(row, row);
+		}
+	}
 
     public void addUser(User user)
 	{
 		insertUser(getRowCount(), user);
-	}//need function to set DAO
+	}
 
     public User getUser(int row)
 	{
@@ -124,14 +127,20 @@ class UserTableModel extends AbstractTableModel {
     	return row;
     }
     
-    public void removeUser(int row){
-    	userData.remove(row);
-		fireTableRowsDeleted(row, row);
-    }//Need DAO
+    public void removeUser(int row, User user){
+    	boolean hadSuccess = userDAO.deleteUser(user);
+    	if (hadSuccess){
+    		userData.remove(user);
+    		fireTableRowsDeleted(row, row);
+    	}
+    }
     
-    
+    public void removeUserAt(int row){
+    	removeUser(row, getUser(row));
+    }
     public void replaceUser(int row, User user)
 	{
+    	//update this when method added.
 		userData.set(row, user);
 		fireTableRowsUpdated(row, row);
 	}//Need DAO

@@ -11,10 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class AddUserPanel extends JPanel{
-	//Grid Layout used
-	
-	
+public class AddUserPanel extends JPanel {
+	// Grid Layout used
+
 	JLabel title = new JLabel("ADD USER TO DEFECT TRACKER SYSTEM");
 	JLabel userLabel = new JLabel("User ID");
 	JTextField user = new JTextField(10);
@@ -33,31 +32,27 @@ public class AddUserPanel extends JPanel{
 	JLabel passwordLabel = new JLabel("Password");
 	JTextField password = new JTextField(15);
 	JButton submit = new JButton("Add User");
-	//JButton back = new JButton("Back");
-	
+
 	UserDAO userDAO = new UserDAO();
 	ArrayList<User> userModel = new ArrayList<User>(userDAO.arrayList);
 	UserTableModel userTableModel = new UserTableModel(userModel);
-	
-	
-	public AddUserPanel(TrackerPane tracker){
-				
+
+	public AddUserPanel(TrackerPane tracker) {
+
 		ButtonListener b = new ButtonListener();
 		submit.addActionListener(b);
-		//back.addActionListener(b);
-		
+
 		setLayout(new BorderLayout());
-		
+
 		title.setFont(new Font("Serif", Font.PLAIN, 16));
 		add(title, BorderLayout.NORTH);
-		
-		JPanel buttonLabels = new JPanel(new GridLayout(8,0));
-		JPanel textBoxes = new JPanel(new GridLayout(8,0));
-		
+
+		JPanel buttonLabels = new JPanel(new GridLayout(8, 0));
+		JPanel textBoxes = new JPanel(new GridLayout(8, 0));
+
 		buttonLabels.add(userLabel);
-		user.setEditable(false);              //this is auto-inc 
-		//  SELECT LAST_INSERT_ID();
-		textBoxes.add(user);	
+		user.setEditable(false); // this is auto-inc
+		textBoxes.add(user);
 		buttonLabels.add(lNameLabel);
 		textBoxes.add(lName);
 		buttonLabels.add(fNameLabel);
@@ -72,26 +67,26 @@ public class AddUserPanel extends JPanel{
 		textBoxes.add(email);
 		buttonLabels.add(passwordLabel);
 		textBoxes.add(password);
-				
+
 		add(buttonLabels, BorderLayout.WEST);
 		add(textBoxes, BorderLayout.CENTER);
-		
+
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-	
+
 		buttonPanel.add(submit);
-		//buttonPanel.add(back);
-		
-		add(buttonPanel, BorderLayout.SOUTH);		
+		// buttonPanel.add(back);
+
+		add(buttonPanel, BorderLayout.SOUTH);
 	}
-	
+
 	class ButtonListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
 			if (e.getSource() == submit) {
-				//String tempUser = user.getText();
+				int tempUserInt = -1;           //temporary because auto-int
 				String tempLName = lName.getText();
 				String tempFName = fName.getText();
 				String tempPosition = position.getText();
@@ -99,14 +94,12 @@ public class AddUserPanel extends JPanel{
 				String tempTeam = team.getText();
 				String tempEmail = email.getText();
 				String tempPassword = password.getText();
-				//int tempUserInt = Integer.parseInt(tempUser);
-				//Changed to -1, but is not used.
-				int tempUserInt = -1;
+
 				int tempAccessLevelInt = Integer.parseInt(tempAccessLevel);
-				//Just changed the order to match - moved Password (Kris)
-				User u = new User(tempUserInt,tempPassword, tempLName, tempFName, tempPosition, tempAccessLevelInt, tempTeam, tempEmail);
-				userDAO.insertNewUser(u);
-				//user.setText("");
+
+				User user = new User(tempUserInt,tempPassword, tempLName, tempFName, tempPosition, tempAccessLevelInt, tempTeam, tempEmail);
+				//userDAO.insertNewUser(user);  // Now does this in userTableModel
+				userTableModel.addUser(user);
 				lName.setText("");
 				fName.setText("");
 				position.setText("");
@@ -118,17 +111,8 @@ public class AddUserPanel extends JPanel{
 				System.out.println("Added new user to database");
 			}
 			
-			
-			
-/*			if(e.getSource() == back){
-				removeAll();
-                JPanel newPanel=new UserAdd();
-                add(newPanel);
-                revalidate();
-                newPanel.repaint();
-			}
-*/		}
 		
+		}
 	}
-
 }
+
