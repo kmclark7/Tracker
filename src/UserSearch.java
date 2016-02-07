@@ -10,10 +10,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+//We may not need this - may make more sense to put it on the userPanel.
 public class UserSearch extends JPanel{
 	//Grid Layout used
-	
-	
+		
 	JLabel title = new JLabel("SEARCH FOR USER IN DEFECT TRACKER SYSTEM");
 	JLabel userLabel = new JLabel("User ID");
 	JTextField user = new JTextField(10);
@@ -32,23 +32,23 @@ public class UserSearch extends JPanel{
 	JLabel passwordLabel = new JLabel("Password");
 	JTextField password = new JTextField(15);
 	JButton submit = new JButton("Search");
-	JButton back = new JButton("Back");
+	//JButton back = new JButton("Back");
 	TrackerPane tracker;
 	UserDAO userDAO = new UserDAO();
 	
-	
-	public void UserAdd(){
-		
-		
+	//Constructor
+	public void UserAdd(TrackerPane tracker){
+			
 		ButtonListener b = new ButtonListener();
 		submit.addActionListener(b);
-		back.addActionListener(b);
+		//back.addActionListener(b);
 		
 		setLayout(new BorderLayout());
 		
 		title.setFont(new Font("Serif", Font.PLAIN, 16));
 		add(title, BorderLayout.NORTH);
 		
+		//This might work better as an 8 by 2 grid. 
 		JPanel buttonLabels = new JPanel(new GridLayout(8,0));
 		JPanel textBoxes = new JPanel(new GridLayout(8,0));
 		
@@ -76,17 +76,19 @@ public class UserSearch extends JPanel{
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 	
 		buttonPanel.add(submit);
-		buttonPanel.add(back);
+		//buttonPanel.add(back);
 		
 		add(buttonPanel, BorderLayout.SOUTH);		
 	}
 	
+	
+	//Needs to have search capacity.
 	class ButtonListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
-			if (e.getSource() == submit) {
+			if (e.getSource().equals(submit)) {
 				String tempUser = user.getText();
 				String tempLName = lName.getText();
 				String tempFName = fName.getText();
@@ -111,16 +113,7 @@ public class UserSearch extends JPanel{
 				password.setText("");
 				
 				System.out.println("Added new user to database");
-			}
-			
-			
-			
-			if(e.getSource() == back){
-				removeAll();
-                AddUserPanel newPanel=new AddUserPanel(tracker);
-                add(newPanel);
-                revalidate();
-                newPanel.repaint();
+		
 			}
 		}
 		

@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
- * 
+ * This is the runnable program object for the Defect Tracker System.
  */
 
 /**

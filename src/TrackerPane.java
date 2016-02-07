@@ -1,15 +1,11 @@
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 /**
- * 
+ * This is a Tabbed Pane object that holds Panels for all of the Defect Tracker Objects
  */
 
 /**
@@ -25,6 +21,7 @@ public class TrackerPane extends JTabbedPane{
 	private final String CHANGE = "VIEW CHANGES";
 	private final String USER = "USER DATA";
 	private final String ADD_USER = "ADD USER";
+	//private final String SEARCH_USER = "SEARCH USER";
 	
 	private final String LOG_TEXT = "Log in or out.";
 	private final String VIEW_TEXT = "View Defect Records.";
@@ -33,10 +30,9 @@ public class TrackerPane extends JTabbedPane{
 	private final String CHANGE_TEXT = "Show Details of Changes Made.";
 	private final String USER_TEXT = "Add or Edit User Information.";
 	private final String ADD_USER_TEXT = "Add a New User";
+	//private final String SEARCH_USER_TEXT = "Search the User database.";
 			
-	private boolean isLoggedIn;
 	private JPanel content;
-	private TrackerPane tracker;
 	private LoginUserPanel logPanel;
 	private ViewPanel viewPanel;
 	private AddPanel addPanel;
@@ -44,7 +40,6 @@ public class TrackerPane extends JTabbedPane{
 	private ChangePanel changePanel;
 	private UserPanel userPanel;
 	private AddUserPanel addUserPanel;
-	private ChangeListener chListener;
 
 	// Create a tabbed pane and fonts for tabs	
 	private JTabbedPane tabPane = new JTabbedPane();
@@ -57,7 +52,6 @@ public class TrackerPane extends JTabbedPane{
 	
 	private TrackerPane(JPanel content, boolean isLoggedIn){
 		
-		this.isLoggedIn = isLoggedIn;
 		this.content = content;
 		
 		//Set size, fonts, etc. for tabbed pane
@@ -114,7 +108,7 @@ public class TrackerPane extends JTabbedPane{
 	public void LogIn(){
 		setVisible(false);
 		content.remove(tabPane);
-		tracker = new TrackerPane(content, true);
+		new TrackerPane(content, true);
 		content.revalidate();
 		setVisible(true);
 	}
@@ -122,7 +116,7 @@ public class TrackerPane extends JTabbedPane{
 	public void LogOut(){
 		setVisible(false);
 		content.removeAll();
-		tracker = new TrackerPane(content, false);
+		new TrackerPane(content, false);
 		content.revalidate();
 		setVisible(true);
 	}
