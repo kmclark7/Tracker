@@ -1,3 +1,4 @@
+package tracker;
 
 /**
  * This is the User object containing data for all users.

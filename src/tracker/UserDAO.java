@@ -1,3 +1,4 @@
+package tracker;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -18,6 +19,8 @@ import java.util.logging.Logger;
 
 public class UserDAO {
 
+	String[] fields = { "UserID", "PASSWORD", "LAST_NAME", "FIRST_NAME", "POSITION",
+			"ACCESS_LEVEL", "TEAM", "EMAIL"};
 	ArrayList<User> arrayList = new ArrayList<User>();
 	Connection con = null;
 	Statement st = null;
@@ -36,12 +39,6 @@ public class UserDAO {
 	// password.
 	
 	
-	public boolean insertNewPassword(User a) {
-
-		String q = "insert into user (userID, password) values ('" + a.getUserID() + "', '" + a.getPassword()
-				+ "');";
-		return executeDAO(q);
-	}
 
 	public boolean insertNewUser(User u) {
 	
@@ -52,12 +49,43 @@ public class UserDAO {
 		return executeDAO(q);
 	}
 
+	
 	// These added by Milissa
 	public boolean deleteUser(User tempUser) {
 		String q = "delete from user where userID='" + tempUser.getUserID() + "';";
 		return executeDAO(q);
 	}
+	
+	
+	public boolean replaceUser(User u){
+		String q = "UPDATE user SET (LAST_NAME, FIRST_NAME, POSITION, ACCESS_LEVEL, TEAM, EMAIL, PASSWORD) values "
+				+ "('" + u.getLastName() + "', '" + u.getFirstName() + "', '" + u.getPosition() + "', '"
+				+ u.getAccessLevel() + "', '" + u.getTeam() + "', '" + u.getEmail() + "', '" + u.getPassword()
+				+ "') WHERE USERID = '"+u.getUserID()+"';";
+		return executeDAO(q);
+	}
 
+	
+	public boolean replaceFieldAt(Object value, User u, int col){
+		
+		String q = "";
+		if(fields[col].equals("ACCESS_LEVEL")){
+			int intValue = (int) value;
+			q = "UPDATE user SET "+fields[col]+" = "+ intValue + " WHERE USERID = '"+ u.getUserID()+"';";
+		}else{
+			String stringValue = (String) value;
+			q = "UPDATE user SET "+fields[col]+" = '"+ stringValue + "' WHERE USERID = '"+ u.getUserID()+"';";			
+		}
+		return executeDAO(q);
+	}
+	
+	
+	public Object getFieldAt(User u, int col){
+		
+		String q = "SELECT "+fields[col]+" from USER WHERE USERID = '"+ u.getUserID()+"';";
+		return executeDAO(q);
+	}
+	
 	
 	public boolean searchUser(User u) {
 		makeConnection();
@@ -136,6 +164,7 @@ public class UserDAO {
 		return hadSuccess;
 	}
 
+	
 	public void makeConnection() {
 		String url = "jdbc:mysql://localhost:3306/tracker";
 		String user = "root";
@@ -179,6 +208,7 @@ public class UserDAO {
 		}
 		return hadSuccess;
 	}
+	
 	
 	private boolean createUserDAO(){
 
