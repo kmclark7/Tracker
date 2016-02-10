@@ -20,9 +20,9 @@ public class UserTableModel extends AbstractTableModel{
 			"Access Level", "Team Name", "Email Address" };
 
 	// private boolean[] isColumnEditable = {false, true, true, true, true, true, true, true};
-	UserDAO userDAO = new UserDAO();
-	ArrayList<User> userModel = new ArrayList<User>(userDAO.arrayList);
-	TrackerPane tracker;
+	private UserDAO userDAO = new UserDAO();
+	private ArrayList<User> userModel = new ArrayList<User>(userDAO.arrayList);
+	private TrackerPane tracker;
 
 	
 	// Constructor
