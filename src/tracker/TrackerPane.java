@@ -1,3 +1,4 @@
+package tracker;
 import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.BorderFactory;
@@ -122,14 +123,12 @@ public class TrackerPane extends JTabbedPane{
 	}
 	
 	public void updateUserPanel(){
-		setVisible(false);
+
 		int index = tabPane.indexOfComponent(userPanel);
 		tabPane.remove(userPanel);
-		fireStateChanged();
-		userPanel = new UserPanel(this);
+		UserPanel userPanel = new UserPanel(this);
 		tabPane.insertTab(USER, null, userPanel, USER_TEXT, index);
-		System.out.println(tabPane.indexOfComponent(userPanel));
-		setVisible(true);
+		tabPane.setSelectedComponent(userPanel);
 
 	}
 
