@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 public class AddUserPanel extends JPanel {
 	// Grid Layout used
 	JTable userTable;
+	JTable filterTable;
 	JLabel title = new JLabel("ADD USER TO DEFECT TRACKER SYSTEM");
 	JLabel userLabel = new JLabel("User ID");
 	JTextField user = new JTextField(10);
@@ -59,6 +60,8 @@ public class AddUserPanel extends JPanel {
 		JPanel buttonLabels = new JPanel(new GridLayout(8, 0));
 		JPanel textBoxes = new JPanel(new GridLayout(8, 0));
 
+		//Can we do access level as drop down?  What about Team, position?
+		//This will mean less error checking.
 		buttonLabels.add(userLabel);
 		user.setEditable(false); // this is auto-inc
 		textBoxes.add(user);
