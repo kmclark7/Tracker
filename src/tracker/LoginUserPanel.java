@@ -14,7 +14,6 @@ import javax.swing.JTextField;
 /**
  * This is a panel object that displays a login screen and handles logging in and out.
  */
-
 /**
  * @author Kerty Levy
  */
@@ -24,16 +23,16 @@ public class LoginUserPanel extends JPanel {
 
 	//String[] User = {"userID", "password"};   //don't need this?
 	
-	JLabel loginInstructions = new JLabel("Please enter your user ID and password to access the tracker system");
-	JLabel userIDLabel = new JLabel ("UserID");
-	JTextField userIDText = new JTextField(50);
-	JLabel passwordLabel = new JLabel("Password");
-	JTextField passwordText = new JTextField(50);
-	JButton login = new JButton("login");
-	JButton logout = new JButton("logout");
-	UserDAO userDAO = new UserDAO();
+	private JLabel loginInstructions = new JLabel("Please enter your user ID and password to access the tracker system");
+	private JLabel userIDLabel = new JLabel ("UserID");
+	private JTextField userIDText = new JTextField(50);
+	private JLabel passwordLabel = new JLabel("Password");
+	private JTextField passwordText = new JTextField(50);
+	private JButton login = new JButton("login");
+	private JButton logout = new JButton("logout");
+	private UserDAO userDAO = new UserDAO();
 	//Added name of main panel to call methods from
-	TrackerPane tracker;
+	private TrackerPane tracker;
 	
 	//Added a JPanel in the constructor so that we can 
 	//pass it the name of the main panel when needed.

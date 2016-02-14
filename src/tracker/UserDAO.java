@@ -19,12 +19,12 @@ import java.util.logging.Logger;
 
 public class UserDAO {
 
-	String[] fields = { "UserID", "PASSWORD", "LAST_NAME", "FIRST_NAME", "POSITION",
+	private String[] fields = { "UserID", "PASSWORD", "LAST_NAME", "FIRST_NAME", "POSITION",
 			"ACCESS_LEVEL", "TEAM", "EMAIL"};
-	ArrayList<User> arrayList = new ArrayList<User>();
-	Connection con = null;
-	Statement st = null;
-	ResultSet rs = null;
+	public ArrayList<User> arrayList = new ArrayList<User>();
+	private Connection con = null;
+	private Statement st = null;
+	private ResultSet rs = null;
 
 	//Constructor
 	public UserDAO() {
