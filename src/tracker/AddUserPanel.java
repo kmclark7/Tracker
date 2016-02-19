@@ -18,11 +18,13 @@ import javax.swing.JTextField;
  */
 
 /**
- * @author Milissa Parmentier
+ * @author 
  */
 
 public class AddUserPanel extends JPanel {
 	// Grid Layout used
+	JTable userTable;
+	JTable filterTable;
 	JLabel title = new JLabel("ADD USER TO DEFECT TRACKER SYSTEM");
 	JLabel userLabel = new JLabel("User ID");
 	JTextField userField = new JTextField(10);
@@ -42,12 +44,10 @@ public class AddUserPanel extends JPanel {
 	JTextField password = new JTextField(15);
 	JButton submit = new JButton("Add User");
 	UserTableModel userTableModel;
-	TrackerPane tracker;
-
 
 	public AddUserPanel(TrackerPane tracker) {
+		userTable = new JTable(userTableModel);
 		userTableModel = new UserTableModel(tracker);
-		this.tracker = tracker;
 
 		ButtonListener b = new ButtonListener();
 		submit.addActionListener(b);
@@ -108,10 +108,9 @@ public class AddUserPanel extends JPanel {
 				int tempAccessLevelInt = Integer.parseInt(tempAccessLevel);
 				
 				//Need error checking
-				User user = new User(tempUserInt,tempPassword, tempLName,
-				tempFName, tempPosition, tempAccessLevelInt, tempTeam, tempEmail);
+				User user = new User(tempUserInt,tempPassword, tempLName, tempFName, tempPosition, tempAccessLevelInt, tempTeam, tempEmail);
+				//userDAO.insertNewUser(user);  // Now does this in userTableModel below
 				userTableModel.addUser(user);
-				tracker.updateUserPanel();
 				lName.setText("");
 				fName.setText("");
 				position.setText("");
@@ -119,12 +118,11 @@ public class AddUserPanel extends JPanel {
 				team.setText("");
 				email.setText("");
 				password.setText("");
-				}
 				
 				//System.out.println("Added new user to database");
 			}			
+		}
 	}
+
 }
-
-
 

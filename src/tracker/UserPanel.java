@@ -35,10 +35,10 @@ import javax.swing.JScrollPane;
 public class UserPanel extends JPanel {
 	
 	private TrackerPane tracker;
-	protected UserTableModel userTableModel;
-	protected JTable userTable;
-	protected TableRowSorter<UserTableModel> userSorter;
-	protected JScrollPane scroll;
+	private UserTableModel userTableModel;
+	private JTable userTable;
+	private TableRowSorter<UserTableModel> userSorter;
+	private JScrollPane scroll;
 	private JButton addUser = new JButton("Add user");
 	private JButton search = new JButton("Search user");
 	private JButton remove = new JButton("Remove user");
@@ -122,7 +122,6 @@ public class UserPanel extends JPanel {
 
 		}
 	}
-	
 	private void fullUserTableSetup(){
 		userTable.setFont(tableFont);
 		userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
