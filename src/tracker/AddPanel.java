@@ -2,6 +2,7 @@ package tracker;
 import javax.swing.JPanel;
 import javax.swing.JComboBox;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -22,13 +23,12 @@ import javax.swing.JTextField;
 
 public class AddPanel extends JPanel {
 
-	JLabel title = new JLabel("NEW DEFECT DATA ENTRY");
 	JLabel submitter = new JLabel("Submitter");
-	JComboBox subSelect = new JComboBox();
+	JComboBox<Integer> subSelect = new JComboBox<Integer>();
 	JLabel assignee = new JLabel("Assignee");
-	JComboBox assignSelect = new JComboBox();
+	JComboBox<Integer> assignSelect = new JComboBox<Integer>();
 	JLabel date = new JLabel("Date Detected");// Add a format, mask with / /
-	JTextField dateEnter = new JTextField(10);
+	//JTextField dateEnter = new JTextField(10);	//this should be automatically entered
 	JLabel summary = new JLabel("Enter a brief summary describing the defect");
 	JTextField summaryEntry = new JTextField(255);
 	JLabel status = new JLabel("Defect Status");
@@ -39,6 +39,10 @@ public class AddPanel extends JPanel {
 	JTextField priorityEntry = new JTextField(2);
 	JLabel comments = new JLabel("Comments");
 	JTextField commentsEntry = new JTextField(2500);
+	
+	JPanel grid = new JPanel(); 
+    JPanel labels = new JPanel(new GridLayout(0,1));
+    JPanel data = new JPanel(new GridLayout(0,1));
 
 	JButton submit = new JButton("Submit");
 	JButton clear = new JButton("Clear");
@@ -55,42 +59,39 @@ public class AddPanel extends JPanel {
 		//back.addActionListener(AP);
 
 		setLayout(new BorderLayout());
+	    
+		Dimension dim = tracker.getPreferredSize();
+		grid.setPreferredSize(new Dimension(dim.width-50, dim.height-50));
 
-		title.setFont(new Font("Arial", Font.PLAIN, 16));
-		add(title, BorderLayout.NORTH);
-
-		//******I think you want to make one grid that is (8, 2)******
-		JPanel buttonLabels = new JPanel(new GridLayout(2, 0));
-		JPanel textBoxes = new JPanel(new GridLayout(2, 0));
-
-		buttonLabels.add(submitter);
-		buttonLabels.add(assignee);
-		buttonLabels.add(date);
-		textBoxes.add(dateEnter);
-		buttonLabels.add(summary);
-		textBoxes.add(summaryEntry);
-		buttonLabels.add(status);
-		textBoxes.add(statusEntry);
-		buttonLabels.add(description);
-		textBoxes.add(descEntry);
-		buttonLabels.add(priority);
-		textBoxes.add(priorityEntry);
-		buttonLabels.add(comments);
-		textBoxes.add(commentsEntry);
-
-		add(buttonLabels, BorderLayout.WEST);// labels on top of text box
-		add(textBoxes, BorderLayout.CENTER);
+		labels.add(submitter);
+		data.add(subSelect);
+		labels.add(assignee);
+		data.add(assignSelect);
+		//labels.add(date);			//This should be set by the program when entered into database.
+		//data.add(dateEnter);		//Need this in DefectDAO
+		labels.add(summary);
+		data.add(summaryEntry);
+		labels.add(status);
+		data.add(statusEntry);
+		labels.add(description);
+		data.add(descEntry);
+		labels.add(priority);
+		data.add(priorityEntry);
+		labels.add(comments);
+		data.add(commentsEntry);
+		
+		add(labels, BorderLayout.WEST);
+		add(data, BorderLayout.CENTER);
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
 		buttonPanel.add(submit);
-		// buttonPanel.add(clear);
+		buttonPanel.add(clear);
 		//buttonPanel.add(back);
 
 		add(buttonPanel, BorderLayout.SOUTH);// put buttons at the bottom of
 												// panel
-
 	}
 
 	class ButtonListener implements ActionListener {
@@ -103,7 +104,7 @@ public class AddPanel extends JPanel {
 				Toolkit tempSubmitter = subSelect.getToolkit();// get from combo
 																// box
 				Toolkit tempAssignee = assignSelect.getToolkit();
-				String tempDate = dateEnter.getText();
+				//String tempDate = dateEnter.getText();
 				String tempSummary = summaryEntry.getText();
 				String tempDescription = descEntry.getText();
 				int tempPriority = Integer.parseInt(priorityEntry.getText());
@@ -120,7 +121,7 @@ public class AddPanel extends JPanel {
 
 				subSelect.setToolTipText("");
 				assignSelect.setToolTipText("");
-				dateEnter.setText("");
+				//dateEnter.setText("");
 				summaryEntry.setText("");
 				descEntry.setText("");
 				priorityEntry.setText("");

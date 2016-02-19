@@ -18,7 +18,7 @@ import javax.swing.JTextField;
  */
 
 /**
- * @author Kerty Levy
+ * @author 
  */
 
 public class AddUserPanel extends JPanel {
@@ -27,7 +27,7 @@ public class AddUserPanel extends JPanel {
 	JTable filterTable;
 	JLabel title = new JLabel("ADD USER TO DEFECT TRACKER SYSTEM");
 	JLabel userLabel = new JLabel("User ID");
-	JTextField user = new JTextField(10);
+	JTextField userField = new JTextField(10);
 	JLabel lNameLabel = new JLabel("Last Name");
 	JTextField lName = new JTextField(50);
 	JLabel fNameLabel = new JLabel("First Name");
@@ -54,17 +54,14 @@ public class AddUserPanel extends JPanel {
 
 		setLayout(new BorderLayout());
 
-		title.setFont(new Font("Serif", Font.PLAIN, 16));
-		add(title, BorderLayout.NORTH);
-
 		JPanel buttonLabels = new JPanel(new GridLayout(8, 0));
 		JPanel textBoxes = new JPanel(new GridLayout(8, 0));
 
 		//Can we do access level as drop down?  What about Team, position?
 		//This will mean less error checking.
 		buttonLabels.add(userLabel);
-		user.setEditable(false); // this is auto-inc
-		textBoxes.add(user);
+		userField.setEditable(false); // this is auto-inc
+		textBoxes.add(userField);
 		buttonLabels.add(lNameLabel);
 		textBoxes.add(lName);
 		buttonLabels.add(fNameLabel);
@@ -87,7 +84,6 @@ public class AddUserPanel extends JPanel {
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 
 		buttonPanel.add(submit);
-		// buttonPanel.add(back);
 
 		add(buttonPanel, BorderLayout.SOUTH);
 	}
@@ -123,7 +119,7 @@ public class AddUserPanel extends JPanel {
 				email.setText("");
 				password.setText("");
 				
-				System.out.println("Added new user to database");
+				//System.out.println("Added new user to database");
 			}			
 		}
 	}

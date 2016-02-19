@@ -16,8 +16,8 @@ import javax.swing.JTabbedPane;
 public class TrackerPane extends JTabbedPane{
 
 	private final String LOG = "LOGIN / LOGOUT";
-	private final String VIEW = "VIEW RECORD";
-	private final String ADD = "ENTER NEW";
+	private final String DEFECT = "VIEW DEFECT";
+	private final String ADD = "ADD NEW DEFECT";
 	private final String EDIT = "EDIT RECORD";
 	private final String CHANGE = "VIEW CHANGES";
 	private final String USER = "USER DATA";
@@ -25,17 +25,18 @@ public class TrackerPane extends JTabbedPane{
 	//private final String SEARCH_USER = "SEARCH USER";
 	
 	private final String LOG_TEXT = "Log in or out.";
-	private final String VIEW_TEXT = "View Defect Records.";
+	private final String DEFECT_TEXT = "View Defect Records.";
 	private final String ADD_TEXT = "Add New Defect Record.";
 	private final String EDIT_TEXT = "Edit Existing Defect.";
 	private final String CHANGE_TEXT = "Show Details of Changes Made.";
 	private final String USER_TEXT = "Add or Edit User Information.";
 	private final String ADD_USER_TEXT = "Add a New User";
 	//private final String SEARCH_USER_TEXT = "Search the User database.";
-			
+
+	Dimension windowSize;
 	private JPanel content;
 	private LoginUserPanel logPanel;
-	private ViewPanel viewPanel;
+	private DefectPanel defectPanel;
 	private AddPanel addPanel;
 	private EditPanel editPanel;
 	private ChangePanel changePanel;
@@ -56,7 +57,8 @@ public class TrackerPane extends JTabbedPane{
 		this.content = content;
 		
 		//Set size, fonts, etc. for tabbed pane
-		tabPane.setPreferredSize(new Dimension(content.getPreferredSize()));
+		Dimension dimension = content.getPreferredSize();
+		tabPane.setPreferredSize(new Dimension(dimension));
 		tabPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		tabPane.setFont(tabFont);
 		tabPane.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -76,8 +78,8 @@ public class TrackerPane extends JTabbedPane{
 			logPanel = new LoginUserPanel(this, isLoggedIn);
 			tabPane.insertTab(LOG, null, logPanel, LOG_TEXT, index++);
 
-			viewPanel = new ViewPanel(this);	
-			tabPane.insertTab(VIEW, null, viewPanel,VIEW_TEXT , index++);
+			defectPanel = new DefectPanel(this);	
+			tabPane.insertTab(DEFECT, null, defectPanel,DEFECT_TEXT , index++);
 
 			addPanel = new AddPanel(this);	
 			tabPane.insertTab(ADD, null, addPanel, ADD_TEXT, index++);
@@ -95,7 +97,7 @@ public class TrackerPane extends JTabbedPane{
 			tabPane.insertTab(ADD_USER, null, addUserPanel, ADD_USER_TEXT, index++);
 			
 			content.add(tabPane);
-			tabPane.setSelectedComponent(viewPanel);
+			tabPane.setSelectedComponent(defectPanel);
 
 			//Set access to tabs
 			//if (fits role or access)
