@@ -8,6 +8,9 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Timestamp;
+import java.util.Date;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -56,7 +59,6 @@ public class AddPanel extends JPanel {
 		ButtonListener AP = new ButtonListener();
 		submit.addActionListener(AP);
 		clear.addActionListener(AP);
-		//back.addActionListener(AP);
 
 		setLayout(new BorderLayout());
 	    
@@ -104,17 +106,13 @@ public class AddPanel extends JPanel {
 				Toolkit tempSubmitter = subSelect.getToolkit();// get from combo
 																// box
 				Toolkit tempAssignee = assignSelect.getToolkit();
-				//String tempDate = dateEnter.getText();
+				//Need to know how to represent date/time correctly
 				String tempSummary = summaryEntry.getText();
 				String tempDescription = descEntry.getText();
 				int tempPriority = Integer.parseInt(priorityEntry.getText());
 				String tempComments = commentsEntry.getText();
-
-				//*****Commented out this section just until we create these, so it will run.
-				
-				// Don't know if ListDefect is class name yet. Will change if
-				// needed. *** We need to create this! ***
-				//ListDefect d = new ListDefect(tempSubmitter, tempAssignee, tempDate, tempSummary, tempDescription,
+				//Date must be initialized first.
+				//Defect d = new Defect(tempSubmitter, tempAssignee, tempSummary, tempDescription,
 				//		tempPriority, tempComments);
 				//DefectDAO.insertNewDefect(d);// Don't know if DefectDAO is class
 												// name. Will change if needed.  Must create!
@@ -123,6 +121,7 @@ public class AddPanel extends JPanel {
 				assignSelect.setToolTipText("");
 				//dateEnter.setText("");
 				summaryEntry.setText("");
+				statusEntry.setText("");
 				descEntry.setText("");
 				priorityEntry.setText("");
 				commentsEntry.setText("");

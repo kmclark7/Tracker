@@ -16,12 +16,12 @@ import javax.swing.table.AbstractTableModel;
 
 public class UserTableModel extends AbstractTableModel{
 	
-	private String[] userColumnNames = { "User ID", "User Password", "Last Name", "First Name", "Position",
+	protected String[] userColumnNames = { "User ID", "User Password", "Last Name", "First Name", "Position",
 			"Access Level", "Team Name", "Email Address" };
 
 	// private boolean[] isColumnEditable = {false, true, true, true, true, true, true, true};
-	private UserDAO userDAO = new UserDAO();
-	private ArrayList<User> userModel = new ArrayList<User>(userDAO.arrayList);
+	protected UserDAO userDAO = new UserDAO();
+	protected ArrayList<User> userModel = new ArrayList<User>(userDAO.arrayList);
 	private TrackerPane tracker;
 
 	

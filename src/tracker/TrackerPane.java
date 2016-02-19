@@ -131,7 +131,6 @@ public class TrackerPane extends JTabbedPane{
 		UserPanel userPanel = new UserPanel(this);
 		tabPane.insertTab(USER, null, userPanel, USER_TEXT, index);
 		tabPane.setSelectedComponent(userPanel);
-
 	}
 
 		

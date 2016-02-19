@@ -107,10 +107,11 @@ public class DefectPanel extends JPanel{
 				if(row == -1){
 					String msg = "Please select a defect record to remove.";
 					JOptionPane.showMessageDialog(null, msg, "ERROR", JOptionPane.ERROR_MESSAGE);
-				}
 				
-				System.out.println(row+"  "+defectTable.convertRowIndexToModel(row));
-				defectTableModel.removeDefectAt(defectTable.convertRowIndexToModel(row));
+				}else {			
+					System.out.println(row+"  "+defectTable.convertRowIndexToModel(row));
+					defectTableModel.removeDefectAt(defectTable.convertRowIndexToModel(row));
+				}
 			}
 
 		}
