@@ -1,5 +1,7 @@
 package tracker;
 import java.util.ArrayList;
+import java.util.Vector;
+
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
@@ -211,6 +213,16 @@ public class UserTableModel extends AbstractTableModel{
 		return row;
 	}
 
+	
+	public Vector<String> getUserComboBoxInfo(){
+		Vector<String> userVector = new Vector<String>();
+		userVector.add("Click to Select");
+		for(User u : userModel) {		
+			String userInfo = u.getUserID()+" "+u.getLastName()+" "+u.getFirstName();
+			userVector.add(userInfo);
+		}
+		return userVector;
+	}
 	
 	private void popUpErrorMessage(String msg) {
 		JOptionPane.showMessageDialog(null, msg, "ERROR", JOptionPane.ERROR_MESSAGE);

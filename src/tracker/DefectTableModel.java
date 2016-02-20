@@ -4,6 +4,7 @@
 package tracker;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -190,7 +191,7 @@ public class DefectTableModel extends AbstractTableModel{
 			defectModel.get(row).setPriority_level((int) value);
 			break;		
 		case 5: 
-			defectModel.get(row).setDate_entered((Date) value);
+			defectModel.get(row).setDate_entered((LocalDateTime) value);
 			break;		
 		case 6: 
 			defectModel.get(row).setSubmitter((int) value);

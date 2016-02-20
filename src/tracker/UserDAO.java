@@ -85,8 +85,8 @@ public class UserDAO {
 		String q = "SELECT "+fields[col]+" from USER WHERE USERID = '"+ u.getUserID()+"';";
 		return executeDAO(q);
 	}
-	
-	
+
+
 	public boolean searchUser(User u) {
 		makeConnection();
 		boolean hadSuccess = false;

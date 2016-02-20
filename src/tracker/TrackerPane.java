@@ -125,16 +125,21 @@ public class TrackerPane extends JTabbedPane{
 	}
 	
 	public void updateUserPanel(){
-
 		int index = tabPane.indexOfComponent(userPanel);
 		tabPane.remove(userPanel);
 		UserPanel userPanel = new UserPanel(this);
 		tabPane.insertTab(USER, null, userPanel, USER_TEXT, index);
 		tabPane.setSelectedComponent(userPanel);
-
 	}
 
-		
+	public void updateDefectPanel(){
+		int index = tabPane.indexOfComponent(defectPanel);
+		tabPane.remove(defectPanel);
+		DefectPanel defectPanel = new DefectPanel(this);
+		tabPane.insertTab(DEFECT, null, defectPanel, DEFECT_TEXT, index);
+		tabPane.setSelectedComponent(defectPanel);
+	}
+	
 }//end TrackerPane
 
 
