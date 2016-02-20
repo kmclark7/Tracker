@@ -22,7 +22,7 @@ import javax.swing.JTextField;
  */
 
 public class AddUserPanel extends JPanel {
-	// Grid Layout used
+
 	JTable userTable;
 	JTable filterTable;
 	JLabel title = new JLabel("ADD USER TO DEFECT TRACKER SYSTEM");
@@ -44,8 +44,10 @@ public class AddUserPanel extends JPanel {
 	JTextField password = new JTextField(15);
 	JButton submit = new JButton("Add User");
 	UserTableModel userTableModel;
+	TrackerPane tracker;
 
 	public AddUserPanel(TrackerPane tracker) {
+		this.tracker = tracker;
 		userTable = new JTable(userTableModel);
 		userTableModel = new UserTableModel(tracker);
 
@@ -109,7 +111,6 @@ public class AddUserPanel extends JPanel {
 				
 				//Need error checking
 				User user = new User(tempUserInt,tempPassword, tempLName, tempFName, tempPosition, tempAccessLevelInt, tempTeam, tempEmail);
-				//userDAO.insertNewUser(user);  // Now does this in userTableModel below
 				userTableModel.addUser(user);
 				lName.setText("");
 				fName.setText("");
@@ -119,8 +120,8 @@ public class AddUserPanel extends JPanel {
 				email.setText("");
 				password.setText("");
 				
-				//System.out.println("Added new user to database");
-			}			
+				tracker.updateUserPanel();
+			}
 		}
 	}
 
