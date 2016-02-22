@@ -13,8 +13,8 @@ import java.util.logging.Logger;
  */
 
 /**
- * @author Kerty Levy
  * @author Milissa Parmentier
+ * @author Kristin Clark
  */
 
 public class UserDAO {
@@ -166,9 +166,9 @@ public class UserDAO {
 
 	
 	public void makeConnection() {
-		String url = "jdbc:mysql://localhost:3306/tracker";
+		String url = LoginUserPanel.getURL();
 		String user = "root";
-		String password = "Mommyof5SQL!";
+		String password = LoginUserPanel.getSQLPassword();
 
 		try {
 

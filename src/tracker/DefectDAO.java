@@ -11,10 +11,10 @@ import java.time.ZoneOffset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.ArrayList;
-import java.sql.Date;
 
 /**
- * @author Shelly
+ * @author Shelly Peters
+ * @author Kristin Clark
  *
  */
 public class DefectDAO {
@@ -231,9 +231,9 @@ public class DefectDAO {
 	
 	private void makeConnection() {
 
-		String url = "jdbc:mysql://localhost:3306/tracker";
+		String url = LoginUserPanel.getURL();
 		String user = "root";
-		String password = "Mommyof5SQL!";
+		String password = LoginUserPanel.getSQLPassword();
 
 		try {
 

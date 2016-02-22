@@ -3,10 +3,8 @@
  */
 package tracker;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 

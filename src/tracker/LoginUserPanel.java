@@ -31,8 +31,8 @@ public class LoginUserPanel extends JPanel {
 	private JTextField passwordText = new JTextField(50);
 	private JButton login = new JButton("login");
 	private JButton logout = new JButton("logout");
-	private UserDAO userDAO = new UserDAO();
-	private ArrayList<User> userModel = new ArrayList<User>(userDAO.arrayList);
+	//private UserDAO userDAO = new UserDAO();
+	//private ArrayList<User> userModel = new ArrayList<User>(userDAO.arrayList);
 	private TrackerPane tracker;
 	private int loggedOnUserID;
 	private static int access;
@@ -72,6 +72,7 @@ public class LoginUserPanel extends JPanel {
 		buttonPanel.add(logout);
 		
 		add(buttonPanel, BorderLayout.SOUTH);		
+
 		
 	}
 	
@@ -112,5 +113,13 @@ public class LoginUserPanel extends JPanel {
 	
 	public static int getAccess(){
 		return access;
+	}
+	
+	public static String getSQLPassword(){
+		return "Mommyof5SQL!";
+	}
+	
+	public static String getURL(){
+		return "jdbc:mysql://localhost:3306/tracker";
 	}
 }
