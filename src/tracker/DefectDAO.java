@@ -42,9 +42,7 @@ public class DefectDAO {
 				int tempAssignee = rs.getInt(4);
 				int tempPriority = rs.getInt(5);
 				Timestamp tempStamp = rs.getTimestamp(6);
-				System.out.println(tempStamp);
 				LocalDateTime tempDateEntered = LocalDateTime.ofInstant(tempStamp.toInstant(), ZoneOffset.ofHours(-6));
-				System.out.println(tempDateEntered);
 				int tempSubmitter = rs.getInt(7);
 				String tempStatus = rs.getString(8);
 				String tempComments = rs.getString(9);

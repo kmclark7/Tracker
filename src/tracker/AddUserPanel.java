@@ -49,7 +49,7 @@ public class AddUserPanel extends JPanel {
 	public AddUserPanel(TrackerPane tracker) {
 		this.tracker = tracker;
 		userTable = new JTable(userTableModel);
-		userTableModel = new UserTableModel(tracker);
+		userTableModel = new UserTableModel();
 
 		ButtonListener b = new ButtonListener();
 		submit.addActionListener(b);

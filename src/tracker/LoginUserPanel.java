@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -31,8 +32,10 @@ public class LoginUserPanel extends JPanel {
 	private JButton login = new JButton("login");
 	private JButton logout = new JButton("logout");
 	private UserDAO userDAO = new UserDAO();
-	//Added name of main panel to call methods from
+	private ArrayList<User> userModel = new ArrayList<User>(userDAO.arrayList);
 	private TrackerPane tracker;
+	private int loggedOnUserID;
+	private static int access;
 	
 	//Added a JPanel in the constructor so that we can 
 	//pass it the name of the main panel when needed.
@@ -49,10 +52,6 @@ public class LoginUserPanel extends JPanel {
 		loginInstructions.setFont(new Font("Serif", Font.PLAIN, 16));
 		add(loginInstructions, BorderLayout.NORTH);
 		
-		// to line these up properly, instead of 2x0 grid,
-		// make one JPanel with a 2x2 grid.  
-		//Also, try putting in NORTH or WEST instead of CENTER
-		//so that they do not expand.
 		JPanel buttonLabels = new JPanel(new GridLayout(2,0));
 		JPanel textBoxes = new JPanel(new GridLayout(2,0));	
 		
@@ -83,8 +82,12 @@ public class LoginUserPanel extends JPanel {
 			
 			if (e.getSource().equals(login)) {
 				
-				String tempUserID = userIDText.getText();
-				String tempPassword = passwordText.getText();
+				//String tempUserID = userIDText.getText().trim();
+				//loggedOnUserID = Integer.parseInt(tempUserID);
+				//When searching to check password, also get accessLevel!
+				loggedOnUserID = 48;                                 //1   48;
+				access =  1;
+				//String tempPassword = passwordText.getText();
 				//Need to search for this userID and see if password matches.
 				//	will need a method in userDAO to do this.
 				//User i = new User(tempUserID, tempPassword);
@@ -105,5 +108,9 @@ public class LoginUserPanel extends JPanel {
 			}
 	
 		}
+	}
+	
+	public static int getAccess(){
+		return access;
 	}
 }

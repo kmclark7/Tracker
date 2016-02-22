@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  */
 
 public class UserDAO {
-
+	
 	private String[] fields = { "UserID", "PASSWORD", "LAST_NAME", "FIRST_NAME", "POSITION",
 			"ACCESS_LEVEL", "TEAM", "EMAIL"};
 	public ArrayList<User> arrayList = new ArrayList<User>();

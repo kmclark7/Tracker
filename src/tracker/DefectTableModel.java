@@ -16,18 +16,25 @@ import javax.swing.table.AbstractTableModel;
  */
 public class DefectTableModel extends AbstractTableModel{
 	
-	private String[] defectColumnNames = { "Ticket ID", "Summary", "Description", "Assigned To", "Priority Level",
-			"Date Entered", "Submitted By", "Current Status", "Comments"};
-	
-	// private boolean[] isColumnEditable = {false, true, true, true, true, true, true, true};
-	private DefectDAO defectDAO = new DefectDAO();
+	protected String[] defectColumnNames = { "Ticket ID", "Summary", "Description", "Assigned to", "Priority",
+			"Date Entered", "Submitted by", "Status", "Comments"};
+	private boolean[][] canEditDefectField = {{false, true, true, true, true, false, true, true, true},
+											{false, true, true, false, false, false, true, false, true},
+											{false, false, false, false, false, false, false, false, false}};
+private boolean[][] canViewDefectField = {{true, true, true, true, true, true, true, true, true},
+										{true, true, true, true, true, true, true, true, true},
+										{true, true, true, true, true, true, true, true, true}};
+		private DefectDAO defectDAO = new DefectDAO();
 	private ArrayList<Defect> defectModel = new ArrayList<Defect>(defectDAO.arrayList);
-	private TrackerPane tracker;
+	private ArrayList<String> searchableDefectColumns = new ArrayList<String>();
+	private ArrayList<Integer> searchableDefectColumnNumbers = new ArrayList<Integer>();
+	private int access;
 
 	
 	// Constructor
-	public DefectTableModel(TrackerPane tracker) {
-		this.tracker = tracker;
+	public DefectTableModel() {
+		this.access = LoginUserPanel.getAccess();
+		setSearchableDefectColumns();
 	}
 
 	
@@ -94,12 +101,36 @@ public class DefectTableModel extends AbstractTableModel{
 
 	
 	@Override
-	public boolean isCellEditable(int row, int col) {
-		if (col == 0){return false;}
-		else {return true;}
+	public boolean isCellEditable(int row, int col) {		
+		return canEditDefectField[access][col];
 	}
 
 	
+	public boolean isColumnViewable(int col) {		
+		return canViewDefectField[access][col];
+	}
+
+	private  void setSearchableDefectColumns(){
+		searchableDefectColumns.add("SHOW ALL");
+		searchableDefectColumnNumbers.add(-1);
+
+		for(int col = 0; col < getColumnCount(); col++){
+			if(canViewDefectField[access][col]){
+				searchableDefectColumns.add(getColumnName(col));
+				searchableDefectColumnNumbers.add(col);
+				System.out.println(getColumnName(col)+ "   "+col);
+			}
+		}
+	}
+	
+	public String[] getSearchableDefectColumnsAsArray(){
+		return searchableDefectColumns.toArray(new String[searchableDefectColumns.size()]);
+	}
+	
+	public Integer[] getSearchableDefectColumnNumbersAsArray(){
+		return searchableDefectColumnNumbers.toArray(new Integer[searchableDefectColumnNumbers.size()]);
+	}
+
 	@Override
 	public int getColumnCount() {
 		return defectColumnNames.length;
@@ -157,17 +188,18 @@ public class DefectTableModel extends AbstractTableModel{
 	public void setValueAt(Object value, int row, int col) {
 
 		Object oldValue = getValueAt(row, col);
-		boolean hadSuccess = defectDAO.replaceFieldAt(value, getDefectAt(row), col);
-		//boolean hadSuccess = false;
-		
-		if (hadSuccess){
-			popUpSuccessMessage("Change saved to database.");
-			setTableValueAt(value, row, col);
-		}else{
-			popUpErrorMessage("Error changing in database.");
-			setTableValueAt(oldValue, row, col);
-		} 
-		   			
+		if (!(oldValue.equals(value))){
+			boolean hadSuccess = defectDAO.replaceFieldAt(value, getDefectAt(row), col);
+			//boolean hadSuccess = false;
+			
+			if (hadSuccess){
+				popUpSuccessMessage("Change saved to database.");
+				setTableValueAt(value, row, col);
+			}else{
+				popUpErrorMessage("Error changing in database.");
+				setTableValueAt(oldValue, row, col);
+			} 
+		} 			
 	}// end setValueAt
 
 	

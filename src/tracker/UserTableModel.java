@@ -1,11 +1,7 @@
 package tracker;
 import java.util.ArrayList;
 import java.util.Vector;
-
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -20,18 +16,27 @@ public class UserTableModel extends AbstractTableModel{
 	
 	private String[] userColumnNames = { "User ID", "User Password", "Last Name", "First Name", "Position",
 			"Access Level", "Team Name", "Email Address" };
-
-	// private boolean[] isColumnEditable = {false, true, true, true, true, true, true, true};
+	private boolean[][] canEditUserField = {{false, true, true, true, true, true, true, true},
+											{false, false, false, false, false, false, false, false},
+											{false, false, false, false, false, false, false, false},
+											{false, false, false, false, false, false, false, false}};
+	private boolean[][] canViewUserField = {{true, true, true, true, true, true, true, true},
+											{true, false, true, true, false, false, true, true},
+											{true, false, true, true, false, false, true, true},
+											{true, false, true, true, false, false, true, true}};
 	private UserDAO userDAO = new UserDAO();
 	private ArrayList<User> userModel = new ArrayList<User>(userDAO.arrayList);
-	private TrackerPane tracker;
+	private int access;
+	private ArrayList<String> searchableUserColumns = new ArrayList<String>();
+	private ArrayList<Integer> searchableUserColumnNumbers = new ArrayList<Integer>();
 
 	
 	// Constructor
-	public UserTableModel(TrackerPane tracker) {
-		this.tracker = tracker;	
+	public UserTableModel() {
+		this.access = LoginUserPanel.getAccess();
+		setSearchableUserColumns();
 	}
-
+	
 	
 	public User getUserAt(int row) {
 		return this.userModel.get(row);
@@ -96,22 +101,44 @@ public class UserTableModel extends AbstractTableModel{
 
 	
 	@Override
-	public boolean isCellEditable(int row, int col) {
-		if (col == 0){return false;}
-		else {return true;}
+	public boolean isCellEditable(int row, int col) {		
+		return canEditUserField[access][col];
 	}
 
+	
+	public boolean isColumnViewable(int col) {		
+		return canViewUserField[access][col];
+	}
 	
 	@Override
 	public int getColumnCount() {
 		return userColumnNames.length;
-	}// end getColumnCount
+	}
 
+	private  void setSearchableUserColumns(){
+		searchableUserColumns.add("SHOW ALL");
+		searchableUserColumnNumbers.add(-1);
+
+		for(int col = 0; col < getColumnCount(); col++){
+			if(canViewUserField[access][col]){
+				searchableUserColumns.add(getColumnName(col));
+				searchableUserColumnNumbers.add(col);
+			}
+		}
+	}
 	
+	public String[] getSearchableUserColumnsAsArray(){
+		return searchableUserColumns.toArray(new String[searchableUserColumns.size()]);
+	}
+	
+	public Integer[] getSearchableUserColumnNumbersAsArray(){
+		return searchableUserColumnNumbers.toArray(new Integer[searchableUserColumnNumbers.size()]);
+	}
+
 	@Override
 	public String getColumnName(int column) {
 		return this.userColumnNames[column];
-	}// end getColumnName
+	}
 
 	
 	@Override
@@ -123,8 +150,7 @@ public class UserTableModel extends AbstractTableModel{
 	@Override
 	public int getRowCount() {
 		return userModel.size();
-	}// end getRowCount
-
+	}
 
 	
 	@Override
@@ -151,23 +177,26 @@ public class UserTableModel extends AbstractTableModel{
 		default:
 			return null;
 		}
-	}// end getValueAt
+	}
 	
 	
 	public void setValueAt(Object value, int row, int col) {
 
+		boolean hadSuccess = false;
 		Object oldValue = getValueAt(row, col);
-		boolean hadSuccess = userDAO.replaceFieldAt(value, getUserAt(row), col);
-		//boolean hadSuccess = false;
-		
-		if (hadSuccess){
-			popUpSuccessMessage("Change saved to database.");
-			setTableValueAt(value, row, col);
-		}else{
-			popUpErrorMessage("Error changing in database.");
-			setTableValueAt(oldValue, row, col);
-		} 
-		   			
+		if (!(oldValue == value)){
+			if (isCellEditable(row, col)){
+				hadSuccess = userDAO.replaceFieldAt(value, getUserAt(row), col);
+			}
+			
+			if (hadSuccess){
+				popUpSuccessMessage("Change saved to database.");
+				setTableValueAt(value, row, col);
+			}else{
+				popUpErrorMessage("Error changing in database.");
+				setTableValueAt(oldValue, row, col);
+			} 
+		}   			
 	}// end setValueAt
 
 	
@@ -231,7 +260,7 @@ public class UserTableModel extends AbstractTableModel{
 	
 	private void popUpSuccessMessage(String msg) {
 		JOptionPane.showMessageDialog(null, msg, "SUCCESS", JOptionPane.INFORMATION_MESSAGE);	
-	} 
+	}
 	
 }// end UserTableModel
 
