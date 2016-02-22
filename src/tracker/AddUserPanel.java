@@ -1,11 +1,8 @@
 package tracker;
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -18,7 +15,8 @@ import javax.swing.JTextField;
  */
 
 /**
- * @author 
+ * @author Milissa Parmentier
+ * @author Kristin Clark
  */
 
 public class AddUserPanel extends JPanel {
