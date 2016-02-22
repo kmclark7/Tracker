@@ -2,11 +2,18 @@ package tracker;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.regex.PatternSyntaxException;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -17,56 +24,67 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 /**
- * @author Kristin Clark
+ * @author Erin Harris, Kristin Clark
  *
  */
 public class DefectPanel extends JPanel{
 	
-	private TrackerPane tracker;
-	private DefectTableModel defectTableModel;
+	private DefectTableModel defectTableModel = new DefectTableModel();
 	private JTable defectTable;
-	private TableRowSorter<DefectTableModel> defectSorter;
+	private TableRowSorter<DefectTableModel> defectRowSorter = new TableRowSorter<DefectTableModel>(defectTableModel);
 	private JScrollPane scroll;
 	private JButton addDefect = new JButton("Add Defect");
-	private JButton search = new JButton("Search Defect");
 	private JButton remove = new JButton("Remove Defect");
 	private Font tableFont = new Font("Dialog", Font.PLAIN, 16);
 	private Font headerFont = new Font("Dialog", Font.BOLD, 16);
-	private String[] defectFields = { "Show All", "Ticket ID", "Summary", "Description", "Assigned To",
-			"Priority Level","Date Entered", "Submitted By", "Current Status", "Comments"};
-    int[] colWidths = {10, 100, 100, 10, 5, 50, 10, 10, 150};
-	private JComboBox<String> defectFieldBox = new JComboBox<String>(defectFields);
-	private JLabel comboLabel = new JLabel("Filter table by:");
-	private JLabel filterLabel = new JLabel("Where value is:");
+	private int[] colWidths = {10, 200, 225, 10, 5, 50, 10, 10, 225};
+	private String[] filterFields = defectTableModel.getSearchableDefectColumnsAsArray();
+	private JComboBox<String> defectFieldBox = new JComboBox<String>(filterFields);
+	private Integer[] filterColumns = defectTableModel.getSearchableDefectColumnNumbersAsArray();
+	private final int SHOW_ALL = -1;   //index used to indicate show all.
+ 	private JLabel comboLabel = new JLabel("Filter table by:");
+	private JLabel filterLabel = new JLabel("Where field contains:");
 	private JTextField filterText = new JTextField("");
+	private JButton filter = new JButton("Filter");
+	private JLabel filterButtonLabel = new JLabel("Select and then click below to filter");
+	private final Dimension CELL_SPACING = new Dimension(50, 5);
+	private final Color HEADER_COLOR = new Color(0.6f,0.7f,0.8f);
 
 
 	
 	// Constructor
-	public DefectPanel(TrackerPane tracker) {
+	public DefectPanel() {
 
-		this.tracker = tracker;
-		defectTableModel = new DefectTableModel(tracker);
 		defectTable = new JTable(defectTableModel);
 		setLayout(new BorderLayout());
 		
-		//Create a panel with filtering tools 
-		//Add listeners and add to the main panel.
-		JPanel filterPanel = new JPanel(new GridLayout(2, 2));
+		//Create a panel for filtering tools 
+		JPanel filterPanel = new JPanel(new GridLayout(2, 3));
 		filterPanel.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
+		
+		//Create combo box for filtering
 		comboLabel.setFont(headerFont);
 		filterLabel.setFont(headerFont);
+		filterButtonLabel.setFont(headerFont);
 		defectFieldBox.setFont(tableFont);
 		filterText.setFont(tableFont);
 		filterPanel.add(comboLabel);
 		filterPanel.add(filterLabel);
+		filterPanel.add(filterButtonLabel);
 		filterPanel.add(defectFieldBox);
 		filterPanel.add(filterText);
-		//need listener
+		filterPanel.add(filter);
+		
+		//need to add listener here for combo box and filtering
 		add(filterPanel, BorderLayout.NORTH);
 		
 		//Set up the full main table
@@ -83,6 +101,7 @@ public class DefectPanel extends JPanel{
 		ButtonListener l = new ButtonListener();
 		addDefect.addActionListener(l);
 		remove.addActionListener(l);
+		filter.addActionListener(l);;
 
 		//Create a panel of buttons and add to main panel.
 		JPanel buttonPanel = new JPanel();
@@ -107,15 +126,44 @@ public class DefectPanel extends JPanel{
 				if(row == -1){
 					String msg = "Please select a defect record to remove.";
 					JOptionPane.showMessageDialog(null, msg, "ERROR", JOptionPane.ERROR_MESSAGE);
-				}
-				
-				System.out.println(row+"  "+defectTable.convertRowIndexToModel(row));
+				}			
 				defectTableModel.removeDefectAt(defectTable.convertRowIndexToModel(row));
+	
+			}else if(e.getSource().equals(filter)){	
+				try{
+					int columnSelected = filterColumns[defectFieldBox.getSelectedIndex()];
+					if (columnSelected == SHOW_ALL){
+						defectTable.setRowSorter(null);
+	
+					}else{
+				        String text = filterText.getText().trim();
+				        defectRowSorter.setRowFilter(RowFilter.regexFilter(text, columnSelected));
+				        defectTable.setRowSorter(defectRowSorter);
+					}
+				}
+				catch (PatternSyntaxException PSe){
+					String msg = "Invalid search string.";
+					JOptionPane.showMessageDialog(null, msg, "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
+				catch (Exception ex){
+					String msg = "Error filtering data.";
+					JOptionPane.showMessageDialog(null, msg, "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
+				filterText.setText("");
 			}
-
 		}
 	}
+	
+	
 	private void fullDefectTableSetup(){
+	    for(int j = 0; j < defectTable.getColumnCount(); j++){
+	    	String columnName = defectTable.getColumnName(j);
+	    	TableColumn tableColumn = defectTable.getColumn(defectTable.getColumnName(j));
+	    	tableColumn.setPreferredWidth(colWidths[j]); 
+	    	if(columnName.equals("Date Entered")){
+	    		defectTable.getColumnModel().getColumn(j).setCellRenderer(new DateCellRenderer());
+	    	}
+	    }
 		defectTable.setFont(tableFont);
 		defectTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		defectTable.setSelectionMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
@@ -123,15 +171,32 @@ public class DefectPanel extends JPanel{
 		defectTable.setColumnSelectionAllowed(false);
 		TableRowSorter<DefectTableModel> defectSorter = new TableRowSorter<DefectTableModel>(defectTableModel);
 	    defectTable.setRowSorter(defectSorter);
-	    defectTable.setIntercellSpacing(new Dimension(50, 5));
+	    defectTable.setIntercellSpacing(CELL_SPACING);
 	    JTableHeader header = defectTable.getTableHeader();
-	    header.setBackground(new Color(0.6f,0.7f,0.8f));
+	    header.setBackground(HEADER_COLOR);
 	    header.setFont(headerFont);
 	    defectTable.setRowHeight(25);
-	    for(int j = 0; j < defectTable.getColumnCount(); j++){
-	    	defectTable.getColumn(defectTable.getColumnName(j)).setPreferredWidth(colWidths[j]); 
+	    TableColumnModel colModel = defectTable.getColumnModel();
+	    for(int col = 0; col < colWidths.length; col++){
+	    	
+	    	if (!defectTableModel.isColumnViewable(col)){
+	    		int viewCol = defectTable.convertColumnIndexToView(col);
+	    		if (viewCol != -1){defectTable.removeColumn(colModel.getColumn(viewCol));
+	    		}
+	    	}
 	    }
-	}//end fullUserTableSetup
+	}
+    private class DateCellRenderer extends DefaultTableCellRenderer {
+    	
+        public DateCellRenderer() { super(); }
+
+        @Override
+        public void setValue(Object data) {
+    		DateTimeFormatter f = DateTimeFormatter.ofPattern("MM/dd/YY  hh:mm a");
+            if(data instanceof LocalDateTime){setText(((LocalDateTime) data).format(f));}
+            else {setText("");}        
+        }
+    }
 	
 }//end UserPanel
 

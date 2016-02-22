@@ -6,7 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.util.regex.PatternSyntaxException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -16,7 +16,9 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.JScrollPane;
 
@@ -26,7 +28,7 @@ import javax.swing.JScrollPane;
  */
 
 /**
- * @author Milissa Parmentier
+ * @author Milissa Parmentier, Kristin Clark
  */
 
 //list of the J functions is in Heads Up book on page 413
@@ -34,46 +36,49 @@ import javax.swing.JScrollPane;
 
 public class UserPanel extends JPanel {
 	
-	private TrackerPane tracker;
-	private UserTableModel userTableModel;
+	private UserTableModel userTableModel = new UserTableModel();
 	private JTable userTable;
-	private TableRowSorter<UserTableModel> userSorter;
+	private TableRowSorter<UserTableModel> userRowSorter = new TableRowSorter<UserTableModel>(userTableModel);
 	private JScrollPane scroll;
 	private JButton addUser = new JButton("Add user");
-	private JButton search = new JButton("Search user");
 	private JButton remove = new JButton("Remove user");
 	private Font tableFont = new Font("Dialog", Font.PLAIN, 16);
 	private Font headerFont = new Font("Dialog", Font.BOLD, 16);
-	private String[] userFields = { "Show All", "User ID", "User Password", "Last Name", 
-			"First Name", "Position","Access Level", "Team Name", "Email Address" };
-	private JComboBox<String> userFieldBox = new JComboBox<String>(userFields);
+	private String[] filterFields = userTableModel.getSearchableUserColumnsAsArray();
+	private JComboBox<String> userFieldBox = new JComboBox<String>(filterFields);
+	private Integer[] filterColumns = userTableModel.getSearchableUserColumnNumbersAsArray();
+	private final int SHOW_ALL = -1;   //index used to indicate show all.
+    private int[] colWidths = {10, 100, 100, 100, 100, 10, 100, 150};
 	private JLabel comboLabel = new JLabel("Filter table by:");
-	private JLabel filterLabel = new JLabel("Where value is:");
+	private JLabel filterLabel = new JLabel("Where field contains:");
 	private JTextField filterText = new JTextField("");
-
-
+	private final Dimension USER_CELL_SPACING = new Dimension(5, 0);
+	private final Color USER_HEADER_COLOR = new Color(0.6f,0.7f,0.8f);
+	private JButton filter = new JButton("Filter");
+	private JLabel filterButtonLabel = new JLabel("Select and then click below to filter");
 	
+	 
 	// Constructor
-	public UserPanel(TrackerPane tracker) {
-
-		this.tracker = tracker;
-		userTableModel = new UserTableModel(tracker);
+	public UserPanel() {
+		
 		userTable = new JTable(userTableModel);
 		setLayout(new BorderLayout());
 		
+		
 		//Create a panel with filtering tools 
-		//Add listeners and add to the main panel.
-		JPanel filterPanel = new JPanel(new GridLayout(2, 2));
+		JPanel filterPanel = new JPanel(new GridLayout(2, 3));
 		filterPanel.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
 		comboLabel.setFont(headerFont);
 		filterLabel.setFont(headerFont);
+		filterButtonLabel.setFont(headerFont);
 		userFieldBox.setFont(tableFont);
 		filterText.setFont(tableFont);
 		filterPanel.add(comboLabel);
 		filterPanel.add(filterLabel);
+		filterPanel.add(filterButtonLabel);
 		filterPanel.add(userFieldBox);
 		filterPanel.add(filterText);
-		//need listener
+		filterPanel.add(filter);
 		add(filterPanel, BorderLayout.NORTH);
 		
 		//Set up the full main table
@@ -90,6 +95,7 @@ public class UserPanel extends JPanel {
 		ButtonListener l = new ButtonListener();
 		addUser.addActionListener(l);
 		remove.addActionListener(l);
+		filter.addActionListener(l);;
 
 		//Create a panel of buttons and add to main panel.
 		JPanel buttonPanel = new JPanel();
@@ -118,26 +124,58 @@ public class UserPanel extends JPanel {
 				
 				System.out.println(row+"  "+userTable.convertRowIndexToModel(row));
 				userTableModel.removeUserAt(userTable.convertRowIndexToModel(row));
-			}
+								
+			}else if(e.getSource().equals(filter)){	
+				try{
+					int columnSelected = filterColumns[userFieldBox.getSelectedIndex()];
+					if (columnSelected == SHOW_ALL){
+						userTable.setRowSorter(null);
 
+					}else{
+				        String text = filterText.getText().trim();
+				        userRowSorter.setRowFilter(RowFilter.regexFilter(text, columnSelected));
+				        userTable.setRowSorter(userRowSorter);
+					}
+				}
+				catch (PatternSyntaxException PSe){
+					String msg = "Invalid search string.";
+					JOptionPane.showMessageDialog(null, msg, "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
+				catch (Exception ex){
+					String msg = "Error filtering data.";
+					JOptionPane.showMessageDialog(null, msg, "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
+				filterText.setText("");
+			}
 		}
 	}
+	
+	
 	private void fullUserTableSetup(){
+
 		userTable.setFont(tableFont);
+		userTable.setAutoCreateColumnsFromModel(false);
 		userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		userTable.setSelectionMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
 		userTable.setDragEnabled(false);
 		userTable.setColumnSelectionAllowed(false);
-		TableRowSorter<UserTableModel> userSorter = new TableRowSorter<UserTableModel>(userTableModel);
-	    userTable.setRowSorter(userSorter);
-	    userTable.setIntercellSpacing(new Dimension(50, 5));
+		TableRowSorter<UserTableModel> userRowSorter = new TableRowSorter<UserTableModel>(userTableModel);
+	    userTable.setRowSorter(userRowSorter);
+	    userTable.setIntercellSpacing(USER_CELL_SPACING);
 	    JTableHeader header = userTable.getTableHeader();
-	    header.setBackground(new Color(0.6f,0.7f,0.8f));
+	    header.setBackground(USER_HEADER_COLOR);
 	    header.setFont(headerFont);
 	    userTable.setRowHeight(25);
-	    int[] colWidths = {10, 100, 100, 100, 100, 10, 100, 150};
-	    for(int j = 0; j < userTable.getColumnCount(); j++){
-	    	userTable.getColumn(userTable.getColumnName(j)).setPreferredWidth(colWidths[j]); 
+	    for(int col = 0; col < colWidths.length; col++){
+	    	userTable.getColumn(userTable.getColumnName(col)).setPreferredWidth(colWidths[col]);
+	     } 
+	    TableColumnModel colModel = userTable.getColumnModel();
+	    for(int col = 0; col < colWidths.length; col++){
+	    	if (!userTableModel.isColumnViewable(col)){
+	    		int viewCol = userTable.convertColumnIndexToView(col);
+	    		if (viewCol != -1){userTable.removeColumn(colModel.getColumn(viewCol));
+	    		}
+	    	}
 	    }
 	}//end fullUserTableSetup
 	

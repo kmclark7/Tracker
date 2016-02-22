@@ -59,8 +59,8 @@ public class AddPanel extends JPanel {
 	public AddPanel(TrackerPane tracker) {
 		
 		this.tracker = tracker;	
-		defectTableModel = new DefectTableModel(tracker);
-		userTableModel = new UserTableModel(tracker);
+		defectTableModel = new DefectTableModel();
+		userTableModel = new UserTableModel();
 
 		//Set up combo boxes.
 		userVector = userTableModel.getUserComboBoxInfo();

@@ -78,7 +78,7 @@ public class TrackerPane extends JTabbedPane{
 			logPanel = new LoginUserPanel(this, isLoggedIn);
 			tabPane.insertTab(LOG, null, logPanel, LOG_TEXT, index++);
 
-			defectPanel = new DefectPanel(this);	
+			defectPanel = new DefectPanel();	
 			tabPane.insertTab(DEFECT, null, defectPanel,DEFECT_TEXT , index++);
 
 			addPanel = new AddPanel(this);	
@@ -90,7 +90,7 @@ public class TrackerPane extends JTabbedPane{
 			changePanel = new ChangePanel(this);
 			tabPane.insertTab(CHANGE, null, changePanel, CHANGE_TEXT, index++);
 
-			userPanel = new UserPanel(this);
+			userPanel = new UserPanel();
 			tabPane.insertTab(USER, null, userPanel, USER_TEXT, index++);
 		
 			addUserPanel = new AddUserPanel(this);
@@ -99,8 +99,7 @@ public class TrackerPane extends JTabbedPane{
 			content.add(tabPane);
 			tabPane.setSelectedComponent(defectPanel);
 
-			//Set access to tabs
-			//if (fits role or access)
+			if (LoginUserPanel.getAccess() != 1) {tabPane.setEnabledAt(tabPane.indexOfTab(ADD_USER),  false);}
 			//then tabPane.setEnabledAt(tabPane.indexOfTab(CHANGE), false);
 		}
 		
@@ -109,6 +108,7 @@ public class TrackerPane extends JTabbedPane{
 
 			
 	public void LogIn(){
+		
 		setVisible(false);
 		content.remove(tabPane);
 		new TrackerPane(content, true);
@@ -127,7 +127,7 @@ public class TrackerPane extends JTabbedPane{
 	public void updateUserPanel(){
 		int index = tabPane.indexOfComponent(userPanel);
 		tabPane.remove(userPanel);
-		UserPanel userPanel = new UserPanel(this);
+		UserPanel userPanel = new UserPanel();
 		tabPane.insertTab(USER, null, userPanel, USER_TEXT, index);
 		tabPane.setSelectedComponent(userPanel);
 	}
@@ -135,7 +135,7 @@ public class TrackerPane extends JTabbedPane{
 	public void updateDefectPanel(){
 		int index = tabPane.indexOfComponent(defectPanel);
 		tabPane.remove(defectPanel);
-		DefectPanel defectPanel = new DefectPanel(this);
+		DefectPanel defectPanel = new DefectPanel();
 		tabPane.insertTab(DEFECT, null, defectPanel, DEFECT_TEXT, index);
 		tabPane.setSelectedComponent(defectPanel);
 	}
